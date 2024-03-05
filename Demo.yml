@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pr-demo-pod
+  namespace: demo
+  labels:
+    app: hmx-demo
+spec:
+  selector:
+    matchLabels:
+      app: hmx-demo
+      tier: pr-backend
+  template:
+    metadata:
+      labels:
+        app: hmx-demo
+        tier: pr-backend
+    spec:
+      containers:
+      - name: hmx-demo-container
+        image: 654654298079.dkr.ecr.ap-south-1.amazonaws.com/hello-repository:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pr-hmx-demo-service
+  namespace: demo
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+  type: LoadBalancer
+  selector:
+    app: hmx-demo
+    tier: pr-backend
